@@ -307,7 +307,8 @@ public class Session implements fr.cedrik.email.spi.Session {
 						String uriString = uri.toString();
 						sessionInfoURL = uriString.substring(0, uriString.indexOf(uri.getRawPath())) + sessionInfoURL;
 					}
-					logger.trace("Found s_SessionInfo URL: {}", sessionInfoURL);
+					logger.warn("Found s_SessionInfo URL: {}", sessionInfoURL);
+					logger.warn("Found Body: {}", responseBody);
 				} else {
 					logger.error("Can not find the s_SessionInfo URL; aborting. Response body:\n" + responseBody);
 					return false;
@@ -378,7 +379,7 @@ public class Session implements fr.cedrik.email.spi.Session {
 						logger.error("Multiple cookies \"ShimmerS\" in store; aborting.");
 						return false;
 					}
-					String xIbmINotesNonce;
+					String xIbmINotesNonce="";
 					Pattern shimmerS = Pattern.compile("&N:(\\p{XDigit}+)");
 					Matcher shimmerSMatcher = shimmerS.matcher(cookie.getValue());
 					assert shimmerSMatcher.groupCount() == 1 ; shimmerSMatcher.groupCount();
@@ -386,8 +387,7 @@ public class Session implements fr.cedrik.email.spi.Session {
 						xIbmINotesNonce = shimmerSMatcher.group(1);
 						logger.trace("Found X-IBM-INOTES-NONCE: {}", xIbmINotesNonce);
 					} else {
-						logger.error("Can not find X-IBM-INOTES-NONCE; aborting. ShimmerS cookie: " + cookie);
-						return false;
+						logger.warn("Can not find X-IBM-INOTES-NONCE. Trying with null: ShimmerS cookie: " + cookie);
 					}
 					if (shimmerSMatcher.find()) {
 						logger.error("Found more than 1 X-IBM-INOTES-NONCE; aborting. ShimmerS cookie: " + cookie);
