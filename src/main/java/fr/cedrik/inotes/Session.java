@@ -311,7 +311,10 @@ public class Session implements fr.cedrik.email.spi.Session {
 					logger.warn("Found Body: {}", responseBody);
 				} else {
 					logger.error("Can not find the s_SessionInfo URL; aborting. Response body:\n" + responseBody);
-					return false;
+					sessionInfoURL = sessionFrameURL.replace("l_SessionFrame", "f_SessionInfo");
+
+					logger.warn("Trying patsubstitution : {}", sessionInfoURL);
+
 				}
 				if (sessionInfoMatcher.find()) {
 					logger.error("Found more than 1 s_SessionInfo URL; aborting. Response body:\n" + responseBody);
