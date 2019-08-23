@@ -29,6 +29,7 @@ public abstract class EMailProperties extends ExtendedProperties {
 	private static final String SERVER   = "email.server";//$NON-NLS-1$
 	private static final String USERNAME = "email.user";//$NON-NLS-1$
 	private static final String PASSWORD = "email.password";//$NON-NLS-1$
+	private static final String REDIRECT = "email.redirect";//$NON-NLS-1$
 	private static final String PROXY_TYPE     = "proxy.type";//$NON-NLS-1$
 	private static final String PROXY_HOSTNAME = "proxy.hostname";//$NON-NLS-1$
 	private static final String PROXY_PORT     = "proxy.port";//$NON-NLS-1$
@@ -117,6 +118,14 @@ public abstract class EMailProperties extends ExtendedProperties {
 
 	public void setServerAddress(URL url) {
 		setProperty(SERVER, url.toString());
+	}
+
+	public String getRedirect() {
+		return getProperty(REDIRECT);
+	}
+
+	public void setRedirect(String nsf) {
+		setProperty(REDIRECT, nsf);
 	}
 
 	public String getUserName() {

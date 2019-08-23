@@ -89,6 +89,10 @@ public class HttpContext {
 		return iNotes.getServerAddress();
 	}
 
+	public String getRedirect() {
+		return iNotes.getRedirect();
+	}
+
 	public String getUserName() {
 		return iNotes.getUserName();
 	}

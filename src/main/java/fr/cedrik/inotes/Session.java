@@ -127,7 +127,7 @@ public class Session implements fr.cedrik.email.spi.Session {
 		{
 			params.clear();
 			params.put("%%ModDate", "0000000100000000");
-			params.put("RedirectTo", "/dwaredirect.nsf");
+			params.put("RedirectTo", "/" + context.getRedirect());
 			params.put("password", context.getUserPassword());
 			params.put("username", context.getUserName());
 			httpRequest = context.createRequest(new URL(context.getServerAddress() + "/names.nsf?Login"), HttpMethod.POST, params);
@@ -146,7 +146,7 @@ public class Session implements fr.cedrik.email.spi.Session {
 					logger.warn("ERROR while authenticating user \""+context.getUserName()+"\". Please check your parameters in " + INotesProperties.FILE);
 					return false;
 				} else {
-					logger.error("Unknown server response while authenticating user \""+context.getUserName()+"\": " + httpResponse.getRawStatusCode() + ' ' + httpResponse.getStatusText());
+					logger.error("Unknown server response while authenticating user 1a \""+context.getUserName()+"\": " + httpResponse.getRawStatusCode() + ' ' + httpResponse.getStatusText());
 					return false;
 				}
 			} finally {
@@ -157,14 +157,14 @@ public class Session implements fr.cedrik.email.spi.Session {
 		// Step 1b: login (iNotesSRV cookie + base url)
 		{
 			params.clear();
-			httpRequest = context.createRequest(new URL(context.getServerAddress() + "/dwaredirect.nsf"), HttpMethod.GET, params);
+			httpRequest = context.createRequest(new URL(context.getServerAddress() + "/" +context.getRedirect()), HttpMethod.GET, params);
 			httpResponse = httpRequest.execute();
 			trace(httpRequest, httpResponse);
 			context.rememberCookies(httpRequest, httpResponse);
 			responseBody = IOUtils.toString(httpResponse.getBody(), context.getCharset(httpResponse));
 			try {
 				if (! httpResponse.getStatusCode().series().equals(HttpStatus.Series.SUCCESSFUL)) {
-					logger.error("Unknown server response while authenticating user \""+context.getUserName()+"\": " + httpResponse.getRawStatusCode() + ' ' + httpResponse.getStatusText());
+					logger.error("Unknown server response while authenticating user 1b \""+context.getUserName()+"\": " + httpResponse.getRawStatusCode() + ' ' + httpResponse.getStatusText());
 					return false;
 				}
 			} finally {
@@ -348,6 +348,7 @@ public class Session implements fr.cedrik.email.spi.Session {
 				Matcher jsArrayMatcher = jsArray.matcher(responseBody);
 				assert jsArrayMatcher.groupCount() == 4 ; jsArrayMatcher.groupCount();
 				List<String> excludedFoldersIds = context.getExcludedFoldersIds();
+				logger.info("Huch something is not working {}", responseBody);
 				while (jsArrayMatcher.find()) {
 					String levelTree   = jsArrayMatcher.group(1);
 					int levelNumber    = Integer.parseInt(jsArrayMatcher.group(2));
@@ -357,6 +358,7 @@ public class Session implements fr.cedrik.email.spi.Session {
 						int startIndex = url.indexOf(".nsf/") + ".nsf/".length();
 						int endIndex = url.indexOf('/', startIndex+1);
 						String id = url.substring(startIndex, endIndex);
+						logger.info("Folder id {}", id);
 						// filter folders to exclude non-user things like "Forums", "Rules", "Stationery" etc.
 						if (! (levelNumber <= 1 && excludedFoldersIds.contains(id))) {
 							Folder folder = new Folder();
@@ -365,7 +367,7 @@ public class Session implements fr.cedrik.email.spi.Session {
 							folder.name = name;
 							folder.id = id;
 							folders.add(folder);
-							logger.debug("Found iNotes folder {}", folder);
+							logger.warn("Found iNotes folder {}", folder);
 						}
 					}
 				}
