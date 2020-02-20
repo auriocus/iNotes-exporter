@@ -70,7 +70,7 @@ public class HttpContext {
 			httpRequestFactory.setUseCaches(false);
 			httpRequestFactory.setInstanceFollowRedirects(false);
 			httpRequestFactory.setConnectTimeout(10000);
-			httpRequestFactory.setReadTimeout(30000);
+			httpRequestFactory.setReadTimeout(120000);
 			// special handling for debugging: proxy running on same computer
 			try {
 				if (proxy.type() == Proxy.Type.HTTP && ((InetSocketAddress)proxy.address()).getAddress().equals(InetAddress.getLocalHost())) {

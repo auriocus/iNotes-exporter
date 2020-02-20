@@ -15,7 +15,7 @@ public class INotesProperties extends EMailProperties {
 	public static final String FILE = "/iNotes.properties";//$NON-NLS-1$
 	// default values
 	public static final String DEFAULT_NOTES_FOLDER_ID = Folder.INBOX;
-	public static final String DEFAULT_EXCLUDED_FOLDERS_IDS = "($JunkMail),($SoftDeletions),Threads,hive,(Rules),Stationery";//$NON-NLS-1$
+	public static final String DEFAULT_EXCLUDED_FOLDERS_IDS = "($Drafts),($JunkMail),($SoftDeletions),Threads,hive,(Rules),Stationery";//$NON-NLS-1$
 	public static final Boolean DEFAULT_FIX_DATE_MIME_HEADER = Boolean.TRUE;
 	// iNotes.properties keys
 	private static final String FIX_DATE_MIME_HEADER = "notes.mime.headers.date.fix";//$NON-NLS-1$
