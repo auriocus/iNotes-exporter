@@ -38,6 +38,7 @@ public class HttpContext {
 	protected String proxyBaseURL;
 	protected String folderBaseURL;
 	protected String mailEditBaseURL;
+	protected String currentFolder;
 
 	static {
 //		cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
@@ -52,6 +53,8 @@ public class HttpContext {
 
 	public HttpContext(INotesProperties iNotes) {
 		this.iNotes = iNotes;
+		currentFolder = iNotes.getCurrentFolderId();
+
 		cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
 		httpRequestExecutor = getHttpRequestExecutor();
 	}
@@ -108,10 +111,10 @@ public class HttpContext {
 	}
 
 	public String getCurrentFolderId() {
-		return iNotes.getCurrentFolderId();
+		return currentFolder;
 	}
 	public void setCurrentFolderId(String notesFolderID) {
-		iNotes.setCurrentFolderId(notesFolderID);
+		currentFolder = notesFolderID;
 	}
 
 	public List<String> getExcludedFoldersIds() {

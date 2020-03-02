@@ -419,7 +419,22 @@ public class Session implements fr.cedrik.email.spi.Session {
 		if (allMessagesCache != null) {
 			return allMessagesCache;
 		}
+
+		// retrieve data for Inbox
+		context.setCurrentFolderId(Folder.INBOX);
 		allMessagesCache = getMessagesMetaData(null, null, Integer.MAX_VALUE);
+		
+		context.setCurrentFolderId(Folder.SENT);
+		MessagesMetaData<MessageMetaData> sentmessages = getMessagesMetaData(null, null, Integer.MAX_VALUE);
+		
+		// switch context to All documents, allow retrieving the messages from all folders
+		context.setCurrentFolderId(Folder.ALL);
+		
+		// add sent messages to inbox to result in all messages
+		for (MessageMetaData message : sentmessages.entries) {
+			allMessagesCache.entries.add(message);
+		}
+
 		return allMessagesCache;
 	}
 	@Override
@@ -494,7 +509,10 @@ public class Session implements fr.cedrik.email.spi.Session {
 		params.put("Start", Integer.toString(start));
 		params.put("Count", Integer.toString(count));
 		params.put("resortdescending", "5");
-		ClientHttpRequest httpRequest = context.createRequest(new URL(context.getProxyBaseURL()+"&PresetFields=DBQuotaInfo;1,FolderName;"+context.getCurrentFolderId()+",UnreadCountInfo;1,s_UsingHttps;1,hc;$98,noPI;1"), HttpMethod.GET, params);
+		URL requrl = new URL(context.getProxyBaseURL()+"&PresetFields=DBQuotaInfo;1,FolderName;"+context.getCurrentFolderId()+",UnreadCountInfo;1,s_UsingHttps;1,hc;$98,noPI;1");
+
+		ClientHttpRequest httpRequest = context.createRequest(requrl, HttpMethod.GET, params);
+		//logger.info("Requesting message list: " + requrl);
 		ClientHttpResponse httpResponse = httpRequest.execute();
 		trace(httpRequest, httpResponse);
 //		traceBody(httpResponse);// DEBUG
