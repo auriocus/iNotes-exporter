@@ -72,7 +72,7 @@ public class HttpContext {
 			httpRequestFactory.setAllowUserInteraction(false);
 			httpRequestFactory.setUseCaches(false);
 			httpRequestFactory.setInstanceFollowRedirects(false);
-			httpRequestFactory.setConnectTimeout(10000);
+			httpRequestFactory.setConnectTimeout(60000);
 			httpRequestFactory.setReadTimeout(120000);
 			// special handling for debugging: proxy running on same computer
 			try {
