@@ -155,7 +155,14 @@ public class Session implements fr.cedrik.email.spi.Session {
 		}
 
 		// Step 1b: login (iNotesSRV cookie + base url)
-		{
+		{		logger.info("Going sleepy to avoid timeout");
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					logger.trace("Interrupted - abort");
+					return false;
+				}
+
 			params.clear();
 			httpRequest = context.createRequest(new URL(context.getServerAddress() + "/" +context.getRedirect()), HttpMethod.GET, params);
 			httpResponse = httpRequest.execute();
@@ -227,8 +234,16 @@ public class Session implements fr.cedrik.email.spi.Session {
 		{
 			params.clear();
 			// need to emulate a real browser, or else we get an "unknown browser" response with no possibility to continue
-			context.getHttpHeaders().set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:24.0) Gecko/20100101 Firefox/24.0");
-//			context.getHttpHeaders().set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/536.30.1 (KHTML, like Gecko) Version/6.0.5 Safari/536.30.1");
+//			context.getHttpHeaders().set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:24.0) Gecko/20100101 Firefox/24.0");
+			context.getHttpHeaders().set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/536.30.1 (KHTML, like Gecko) Version/6.0.5 Safari/536.30.1");
+			// gives timeout quite often - maybe try sleeping a little before the new request
+			logger.info("Going sleepy to avoid timeout");
+			try {
+		     		Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				logger.trace("Interrupted - abort");
+			 	return false;
+			}
 			httpRequest = context.createRequest(new URL(redirectURL), HttpMethod.GET, params);
 			httpResponse = httpRequest.execute();
 			trace(httpRequest, httpResponse);
@@ -275,7 +290,14 @@ public class Session implements fr.cedrik.email.spi.Session {
 			}
 
 			// play the SessionFrame URL to get the SessionInfo URL
-			{
+			{	logger.info("Going sleepy to avoid timeout");
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					logger.trace("Interrupted - abort");
+					return false;
+				}
+
 				params.clear();
 				httpRequest = context.createRequest(new URL(sessionFrameURL), HttpMethod.GET, params);
 				httpResponse = httpRequest.execute();
@@ -323,7 +345,14 @@ public class Session implements fr.cedrik.email.spi.Session {
 			}
 
 			// play the SessionInfo URL to parse the folders (this also contains the Domino server name)
-			{
+			{	logger.info("Going sleepy to avoid timeout");
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					logger.trace("Interrupted - abort");
+					return false;
+				}
+
 				params.clear();
 				httpRequest = context.createRequest(new URL(sessionInfoURL), HttpMethod.GET, params);
 				httpResponse = httpRequest.execute();
@@ -405,6 +434,15 @@ public class Session implements fr.cedrik.email.spi.Session {
 
 		logger.info("Authentication successful for user \"" + context.getUserName() + '"');
 		isLoggedIn = true;
+		
+		logger.info("Going sleepy to avoid timeout");
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			logger.trace("Interrupted - abort");
+			return false;
+		}
+
 		return true;
 	}
 
